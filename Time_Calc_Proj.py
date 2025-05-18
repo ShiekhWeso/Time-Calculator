@@ -7,7 +7,7 @@ def add_time(start, duration, day=""):
             print("print the minutes must be less than 60!")
             return
     except Exception:
-        print("The must contain the period.")
+        print("The Time must contain the period 'AM or PM'.")
         return
     
     duration_hour, duration_minute = map(int, duration.strip().split(":"))
@@ -18,4 +18,7 @@ def add_time(start, duration, day=""):
     new_hour = start_hour + duration_hour
     new_minute = start_minute + duration_minute
     
-add_time("3:00 ", "2:30")
+    print(f"'{new_hour}:{new_minute} {period_1}'")
+    
+
+final_time = add_time("3:00 PM", "2:30")
