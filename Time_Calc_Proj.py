@@ -15,24 +15,19 @@ def add_time(start, duration, day=""):
         print("print the minutes must be less than 60!")
         return
 
-    new_hour = start_hour + duration_hour
-    new_minute = start_minute + duration_minute
+    total_minutes = start_hour + duration_minute
+    extra_hours = total_minutes // 60
+    remaining_minutes = total_minutes % 60
+    total_hours = start_hour + duration_hour + extra_hours
     
-    if new_minute >= 60:
-        extra_hours = new_minute // 60
-        remaining_minutes = new_minute % 60
-        new_hour += extra_hours
+    period_flips = (total_hours - 1) // 12    #(12 - 1) // 12 = 11 // 12 = 0   #(13 - 1) // 12 = 12 // 12 = 1
+    if period_flips % 2 == 1:
+        period_1 = "PM" if period_1 == "AM" else "AM"
+        
+    display_hour = total_hours % 12
+    if display_hour == 0:
+        display_hour = 12
     
-    if period_1 == "AM" and new_hour % 12 >= 0:
-        period_1 == "PM"
-        new_hour = new_hour % 12
-    elif period_1 == "PM" and new_hour % 12 >= 0:
-        period_1 == "AM"
-        new_hour = new_hour % 12
-    else:
-        print("Invalid period! must be AM or PM") 
-        return
+    print(f"'{display_hour}:{remaining_minutes:02d} {period_1}'")
     
-    print(f"'{new_hour}:{remaining_minutes:02d} {period_1}'")
-    
-add_time("3:00 PM", "12:30")
+add_time("3:00 PM", "24:30")
