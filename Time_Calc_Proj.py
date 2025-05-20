@@ -18,7 +18,21 @@ def add_time(start, duration, day=""):
     new_hour = start_hour + duration_hour
     new_minute = start_minute + duration_minute
     
-    print(f"'{new_hour}:{new_minute} {period_1}'")
+    if new_minute >= 60:
+        extra_hours = new_minute // 60
+        remaining_minutes = new_minute % 60
+        new_hour += extra_hours
     
-
-final_time = add_time("3:00 PM", "2:30")
+    if period_1 == "AM" and new_hour % 12 >= 0:
+        period_1 == "PM"
+        new_hour = new_hour % 12
+    elif period_1 == "PM" and new_hour % 12 >= 0:
+        period_1 == "AM"
+        new_hour = new_hour % 12
+    else:
+        print("Invalid period! must be AM or PM") 
+        return
+    
+    print(f"'{new_hour}:{remaining_minutes:02d} {period_1}'")
+    
+add_time("3:00 PM", "12:30")
