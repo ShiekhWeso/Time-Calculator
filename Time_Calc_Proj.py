@@ -1,5 +1,5 @@
 def add_time(start, duration, day=""):
-    days = ["Monday", "Tuesday", "Wednesday", "Thrusday", "Friday", "Saterday", "Sunday"]
+    days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
     try:
         time_part_1, period_1 = start.strip().split()
         start_hour, start_minute = map(int, time_part_1.strip().split(":")) #this line converts the list of ["3","45"] for integers
@@ -15,21 +15,20 @@ def add_time(start, duration, day=""):
         print("print the minutes must be less than 60!")
         return
 
-    total_minutes = start_minute + duration_minute
-    extra_hours = total_minutes // 60
-    remaining_minutes = total_minutes % 60
-    total_hours = start_hour + duration_hour + extra_hours
-    days_later = total_hours // 24
+    start_minutes = start_hour % 12 * 60 + start_minute
+    if period_1.upper() == "PM":
+        start_minutes += 12 * 60
     
-    period_flips = (total_hours - 1) // 12    #(12 - 1) // 12 = 11 // 12 = 0   #(13 - 1) // 12 = 12 // 12 = 1
-    if period_flips % 2 == 1:
-        period_1 = "PM" if period_1 == "AM" else "AM"
-        
-    display_hour = total_hours % 12
-    if display_hour == 0:
-        display_hour = 12
+    total_minutes = start_minutes + duration_hour * 60 + duration_minute
+    days_later = total_minutes // (24 * 60)
+    remaining_minutes = total_minutes % (24 * 60)
+
+    new_period = "AM" if (remaining_minutes // 60) < 12 else "PM"
+    display_hour = (remaining_minutes // 60) % 12
+    display_hour = 12 if display_hour == 0 else display_hour
+    display_minute = remaining_minutes % 60
     
-    result = f"{display_hour}:{remaining_minutes:02d} {period_1}"
+    result = f"{display_hour}:{display_minute:02d} {new_period}"
     if day:
         start_day_index = days.index(day.capitalize())
         new_day_index = (start_day_index + days_later) % 7
@@ -38,6 +37,7 @@ def add_time(start, duration, day=""):
     if days_later == 1:
         result += " (nextday)"
     elif days_later > 1:
+        result += f" ({days_later} days later)"
     print(result)
     
-add_time("3:00 PM", "3:10", "sunday")
+add_time("3:30 PM", "2:12")
