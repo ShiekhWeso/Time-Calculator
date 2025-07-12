@@ -23,11 +23,15 @@ def add_time(start, duration, day=""):
     days_later = total_minutes // (24 * 60)
     remaining_minutes = total_minutes % (24 * 60)
 
-    new_period = "AM" if (remaining_minutes // 60) < 12 else "PM"
     display_hour = (remaining_minutes // 60) % 12
     display_hour = 12 if display_hour == 0 else display_hour
     display_minute = remaining_minutes % 60
     
+    new_period = "AM" if (remaining_minutes // 60) < 12 else "PM"
+    
+    if day:
+        day = day.strip().lower().capitalize()
+        
     result = f"{display_hour}:{display_minute:02d} {new_period}"
     if day:
         start_day_index = days.index(day.capitalize())
@@ -35,9 +39,12 @@ def add_time(start, duration, day=""):
         new_day = days[new_day_index]
         result += f", {new_day}"
     if days_later == 1:
-        result += " (nextday)"
+        result += " (next day)"
     elif days_later > 1:
         result += f" ({days_later} days later)"
-    print(result)
+        
+    if duration == 0 and duration_minute == 0:
+        return f"{start_hour}:{start_minute:02d} {period_1}"
+    return result
     
-add_time("3:30 PM", "2:12")
+print(add_time("3:30 PM", "2:12"))
